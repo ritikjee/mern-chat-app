@@ -8,7 +8,7 @@ import {
 const messageRouter = Router();
 
 messageRouter.post("/create-message", createMessage);
-messageRouter.get("/get-messages", getMessages);
+messageRouter.post("/get-messages", getMessages);
 messageRouter.delete("/delete-message", deleteMessage);
 
 export default messageRouter;

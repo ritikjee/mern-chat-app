@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { io } from "socket.io-client";
+import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "sonner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -15,10 +16,25 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const socket = io("http://localhost:8080");
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          disableTransitionOnChange
+        >
+          <div>
+            {children}
+            <Toaster
+              position="top-center"
+              closeButton
+              richColors
+              duration={2000}
+            />
+          </div>
+        </ThemeProvider>
+      </body>
     </html>
   );
 }

@@ -29,7 +29,14 @@ export async function register(req: Request, res: Response) {
       profileImage: profileImage,
     });
 
-    return res.status(201).send("User created");
+    const token = jsonwebtoken.sign(
+      { id: user._id, username: user.username },
+      process.env.JWT_SECRET as string
+    );
+
+    return res
+      .status(201)
+      .send({ token, message: "User created successfully" });
   } catch (error) {
     console.log(error);
     return res.status(500).send("Something went wrong");
@@ -98,11 +105,14 @@ export const getUserDetail = async (req: Request, res: Response) => {
       return res.status(404).send("User not found");
     }
 
+    // return res.status(400).send(null);
+
     return res.status(200).send({
+      id: user._id,
       name: user.fullName,
+      email: user.email,
       username: user.username,
       profileImage: user.profilePic,
-      bio: user.bio,
     });
   } catch (error) {
     console.log(error);

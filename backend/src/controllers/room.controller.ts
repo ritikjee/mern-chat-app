@@ -44,6 +44,26 @@ export async function createRoom(req: Request, res: Response) {
   }
 }
 
+export async function getRoom(req: Request, res: Response) {
+  try {
+    const roomId = req.query.roomId as string;
+
+    if (!roomId) {
+      return res.status(400).send("Please fill all details");
+    }
+
+    const room = await Room.findById(roomId);
+
+    if (!room) {
+      return res.status(404).send("Room not found");
+    }
+
+    return res.status(200).send(room);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export async function getRooms(req: Request, res: Response) {
   try {
     const userId = req.query.userId as string;
@@ -147,6 +167,70 @@ export const editRoom = async (req: Request, res: Response) => {
     await room.save();
 
     return res.status(200).send("Room updated");
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send("Something went wrong");
+  }
+};
+
+export const removeMember = async (req: Request, res: Response) => {
+  try {
+    const roomId = req.body.roomId as string;
+    const userId = req.body.userId as string;
+
+    if (!roomId || !userId) {
+      return res.status(400).send("Please fill all details");
+    }
+
+    const room = await Room.findById(roomId);
+
+    if (!room) {
+      return res.status(404).send("Room not found");
+    }
+
+    if (room.admin.toString() === userId) {
+      return res.status(403).send("Forbidden");
+    }
+
+    room.members = room.members.filter(
+      (member) => member.toString() !== userId
+    );
+
+    await room.save();
+
+    return res.status(200).send("User removed from room");
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send("Something went wrong");
+  }
+};
+
+export const leaveRoom = async (req: Request, res: Response) => {
+  try {
+    const roomId = req.body.roomId as string;
+    const userId = req.body.userId as string;
+
+    if (!roomId || !userId) {
+      return res.status(400).send("Please fill all details");
+    }
+
+    const room = await Room.findById(roomId);
+
+    if (!room) {
+      return res.status(404).send("Room not found");
+    }
+
+    if (room.admin.toString() === userId) {
+      return res.status(403).send("Forbidden");
+    }
+
+    room.members = room.members.filter(
+      (member) => member.toString() !== userId
+    );
+
+    await room.save();
+
+    return res.status(200).send("User removed from room");
   } catch (error) {
     console.log(error);
     return res.status(500).send("Something went wrong");
