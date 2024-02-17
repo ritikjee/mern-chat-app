@@ -1,7 +1,8 @@
-import { Input } from "@/components/ui/input";
+import ChatInput from "@/components/chat/chat-input";
+import ChatNavbar from "@/components/chat/chat-navbar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getServerSideUser } from "@/utils/get-server-side-user";
 import axios from "axios";
-import { log } from "console";
 import { redirect } from "next/navigation";
 
 async function RoomIdPage({
@@ -47,27 +48,52 @@ async function RoomIdPage({
   }
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen w-full">
-      <div className="flex flex-1">
+    <div className="flex flex-col  h-screen w-full">
+      <ChatNavbar
+        userId={user.id}
+        name={rooms.name}
+        profilePic={rooms.profile}
+        roomId={params.roomId}
+      />
+      <div className="flex flex-1 overflow-auto">
         {messages.length === 0 ? (
           <h1>No messages</h1>
         ) : (
           <div>
             {
               // @ts-ignore
-              rooms.map((room) => {
-                return (
-                  <div key={room._id}>
-                    <h1>{room.name}</h1>
-                    <p>{room.profile}</p>
+              messages.map((message) => (
+                <div key={message._id} className="my-3">
+                  <div className="flex items-center px-5 gap-5 overflow-auto">
+                    <Avatar className="w-12 h-12">
+                      <AvatarImage
+                        src={message.senderId.profilePic}
+                        alt={message.senderId.fullName}
+                      />
+                      <AvatarFallback>!</AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <div>
+                        {message.senderId.fullName}
+
+                        {user.id === message.senderId._id && (
+                          <span className="text-xs text-zinc-500 pl-3">
+                            {"("}
+                            You
+                            {")"}
+                          </span>
+                        )}
+                      </div>
+                      <div>{message.message}</div>
+                    </div>
                   </div>
-                );
-              })
+                </div>
+              ))
             }
           </div>
         )}
       </div>
-      <Input />
+      <ChatInput roomId={params.roomId} userId={user.id} token={user.token} />
     </div>
   );
 }

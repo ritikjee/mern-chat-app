@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import jsonwebtoken from "jsonwebtoken";
 import Room from "../models/room.model";
+import Message from "../models/message.model";
 
 export async function getMessages(req: Request, res: Response) {
   try {
@@ -29,7 +30,7 @@ export async function getMessages(req: Request, res: Response) {
       return res.status(400).send("Please fill all details");
     }
 
-    const room = await Room.findById(roomId);
+    const room = await Room.findById(roomId).populate("messages");
 
     if (!room) {
       return res.status(404).send("Room not found");
@@ -39,7 +40,13 @@ export async function getMessages(req: Request, res: Response) {
       return res.status(403).send("Forbidden");
     }
 
-    return res.status(200).send(room.messages);
+    const messages = await Message.find({
+      roomId,
+    })
+      .sort({ createdAt: "asc" })
+      .populate("senderId");
+
+    return res.status(200).send(messages);
   } catch (error) {
     console.log(error);
     return res.status(500).send("Something went wrong");
@@ -83,10 +90,11 @@ export async function createMessage(req: Request, res: Response) {
       return res.status(403).send("Forbidden");
     }
 
-    const message = {
-      text,
-      user: userId,
-    };
+    const message = await Message.create({
+      message: text,
+      roomId,
+      senderId: userId,
+    });
 
     room.messages.push(message as any);
     await room.save();

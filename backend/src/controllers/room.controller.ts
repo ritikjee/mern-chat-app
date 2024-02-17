@@ -44,6 +44,48 @@ export async function createRoom(req: Request, res: Response) {
   }
 }
 
+export async function getMembers(req: Request, res: Response) {
+  try {
+    const roomId = req.query.roomId as string;
+
+    if (!roomId) {
+      return res.status(400).send("Please fill all details");
+    }
+
+    const room = await Room.findById(roomId).populate("members");
+
+    if (!room) {
+      return res.status(404).send("Room not found");
+    }
+
+    return res.status(200).send(room.members);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send("Something went wrong");
+  }
+}
+
+export async function getAdminMember(req: Request, res: Response) {
+  try {
+    const roomId = req.query.roomId as string;
+
+    if (!roomId) {
+      return res.status(400).send("Please fill all details");
+    }
+
+    const room = await Room.findById(roomId).populate("admin");
+
+    if (!room) {
+      return res.status(404).send("Room not found");
+    }
+
+    return res.status(200).send(room.admin);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send("Something went wrong");
+  }
+}
+
 export async function getRoom(req: Request, res: Response) {
   try {
     const roomId = req.query.roomId as string;
