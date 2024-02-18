@@ -17,7 +17,7 @@ const roomRouter = Router();
 roomRouter.post("/create-room", createRoom);
 roomRouter.get("/get-rooms", getRooms);
 roomRouter.get("/get-room", getRoom);
-roomRouter.get("/invite-member", addMember);
+roomRouter.post("/invite-member", addMember);
 roomRouter.get("/get-members", getMembers);
 roomRouter.get("/get-admin-member", getAdminMember);
 roomRouter.post("/delete-room", deleteRooms);

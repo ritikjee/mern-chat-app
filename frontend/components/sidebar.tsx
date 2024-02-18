@@ -11,6 +11,7 @@ import axios from "axios";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
 import Link from "next/link";
+import CreateRoom from "./create-room";
 
 async function Sidebar() {
   const user = await getServerSideUser();
@@ -36,9 +37,9 @@ async function Sidebar() {
       <CommandList className="max-h-screen">
         <CommandInput placeholder="Type a command or search..." />
         <CommandEmpty>No results found.</CommandEmpty>
-        {rooms.map((room: any) => (
-          <Link href={`/room/${room._id}`} key={room._id}>
-            <CommandGroup heading={"Rooms"}>
+        <CommandGroup heading={"Rooms"}>
+          {rooms.map((room: any) => (
+            <Link href={`/room/${room._id}`} key={room._id}>
               <CommandItem>
                 <Avatar>
                   <AvatarImage src={room.profile} alt="@shadcn" />
@@ -46,11 +47,11 @@ async function Sidebar() {
                 </Avatar>
                 <span className="ml-2">{room.name}</span>
               </CommandItem>
-            </CommandGroup>
-          </Link>
-        ))}
+            </Link>
+          ))}
+        </CommandGroup>
       </CommandList>
-      <Button>Create Room</Button>
+      <CreateRoom userId={user.id} token={user.token} />
     </Command>
   );
 }

@@ -39,7 +39,7 @@ export default async function Home() {
   }
 
   return (
-    <div className="h-screen w-screen items-center justify-center flex ">
+    <div className="h-screen w-screen flex items-center justify-center  ">
       <Card className="md:w-96">
         <CardHeader>
           <CardTitle>Create your own room</CardTitle>

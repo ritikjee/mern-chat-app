@@ -5,7 +5,7 @@ function RoomPage() {
   return (
     <div className="flex flex-col items-center justify-center h-screen w-full">
       <div className="relative h-36 w-36">
-        <Image src={image} alt="Room" layout="fill" objectFit="contain" />
+        <Image src={image} alt="Room" fill />
       </div>
       <h1 className="text-6xl">Horizon</h1>
       <p className="mt-10">

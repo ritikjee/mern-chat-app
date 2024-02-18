@@ -45,8 +45,7 @@ function CreateRoom({ userId, token }: { userId: string; token: string }) {
     mode: "onChange",
     defaultValues: {
       name: "",
-      imageUrl:
-        "https://utfs.io/f/79561200-e86c-4fb8-8785-2d90ba3da4a2-ca7koy.jpg",
+      imageUrl: "",
     },
   });
 

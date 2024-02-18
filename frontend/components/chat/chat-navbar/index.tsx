@@ -1,10 +1,9 @@
 "use client";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import { ModeToggle } from "@/globals/mode-toggle";
-import { Settings, Share, Share2 } from "lucide-react";
 import ChatSetting from "../chat-setting";
+import RoomInvite from "../room-invites";
 
 function ChatNavbar({
   profilePic,
@@ -27,13 +26,7 @@ function ChatNavbar({
         <h1 className="text-lg">{name}</h1>
       </div>
       <div className="flex gap-3">
-        <Button
-          variant={"outline"}
-          size={"icon"}
-          className="bg-primary-foreground"
-        >
-          <Share2 size={24} />
-        </Button>
+        <RoomInvite roomId={roomId} />
         <ChatSetting roomId={roomId} userId={userId} />
         <ModeToggle />
       </div>

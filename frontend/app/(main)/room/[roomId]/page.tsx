@@ -57,7 +57,9 @@ async function RoomIdPage({
       />
       <div className="flex flex-1 overflow-auto">
         {messages.length === 0 ? (
-          <h1>No messages</h1>
+          <h1 className="h-full w-full flex items-center justify-center">
+            No messages. Be the first to send a message
+          </h1>
         ) : (
           <div>
             {

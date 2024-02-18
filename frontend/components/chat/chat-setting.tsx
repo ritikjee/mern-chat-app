@@ -79,7 +79,8 @@ function ChatSetting({ roomId, userId }: { roomId: string; userId: string }) {
         }
       );
       toast.success("Room deleted successfully");
-      router.push("/");
+      router.refresh();
+      router.push("/room");
     } catch (error) {
       console.log(error);
       toast.error("Something went wrong");
@@ -94,8 +95,26 @@ function ChatSetting({ roomId, userId }: { roomId: string; userId: string }) {
           userId,
         }
       );
-      toast.success("Room deleted successfully");
-      router.push("/");
+      toast.success("Room Left successfully");
+      router.refresh();
+      router.push("/room");
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong");
+    }
+  }
+
+  async function removeMember(memberId: string) {
+    try {
+      await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/room/remove-member`,
+        {
+          roomId,
+          userId: memberId,
+        }
+      );
+      toast.success("Member removed successfully");
+      router.refresh();
     } catch (error) {
       console.log(error);
       toast.error("Something went wrong");
@@ -138,10 +157,13 @@ function ChatSetting({ roomId, userId }: { roomId: string; userId: string }) {
                     </div>
                   </div>
                   <div>
-                    {member._id === admin?._id && (
+                    {userId === admin?._id && (
                       <Button
                         variant={"destructive"}
                         disabled={member._id === admin?._id}
+                        onClick={() => {
+                          removeMember(member._id);
+                        }}
                       >
                         Remove
                       </Button>
