@@ -45,6 +45,7 @@ async function RoomIdPage({
     }
   } catch (error) {
     console.log(error);
+    return redirect("/room");
   }
 
   return (
